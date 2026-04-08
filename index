@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Rosa di San Michele · Olimpia Costruzioni · Il Conte di Montecristo</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#C5A028;--gold2:#E2C060;--dark:#060606;--dark2:#0E0E0E;--dark3:#161616;--text:#888077;--text2:#B8B0A4;--white:#F5F2EE}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--dark);color:var(--white);overflow-x:hidden}
+a{color:var(--white);text-decoration:none}
+a:visited{color:var(--white)}
+
+/* ════════════════════════════
+INTRO
+════════════════════════════ */
+#intro{
+position:fixed;inset:0;z-index:9999;
+background:var(–dark);
+display:flex;flex-direction:column;
+align-items:center;justify-content:center;
+padding:2rem;
+transition:opacity 1s ease,visibility 1s ease;
+}
+#intro.gone{opacity:0;visibility:hidden;pointer-events:none}
+#pcanvas{position:absolute;inset:0;pointer-events:none}
+.intro-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;width:100%;max-width:700px}
+
+.intro-logos{
+display:flex;align-items:center;justify-content:center;
+gap:clamp(1rem,4vw,3rem);
+margin-bottom:clamp(1.5rem,4vh,3rem);
+flex-wrap:nowrap;
+}
+.il{display:flex;flex-direction:column;align-items:center;gap:0.6rem;opacity:0;animation:emerge 1.3s cubic-bezier(.16,1,.3,1) forwards}
+.il:nth-child(1){animation-delay:0.3s}
+.il:nth-child(2){animation-delay:0.85s}
+.il:nth-child(3){animation-delay:1.4s}
+@keyframes emerge{
+0%{opacity:0;transform:perspective(600px) translateZ(-400px) scale(0.2)}
+65%{opacity:1;transform:perspective(600px) translateZ(15px) scale(1.04)}
+100%{opacity:1;transform:perspective(600px) translateZ(0) scale(1)}
+}
+.il svg{filter:drop-shadow(0 0 14px rgba(197,160,40,0.45));width:clamp(44px,8vw,72px);height:clamp(44px,8vw,72px)}
+.il-name{font-family:‘Cormorant Garamond’,serif;font-size:clamp(0.5rem,1.5vw,0.7rem);font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:var(–gold2);text-align:center;line-height:1.5}
+.isep{width:1px;height:clamp(30px,5vh,55px);background:linear-gradient(to bottom,transparent,var(–gold),transparent);opacity:0;animation:fi 0.5s 1.1s ease forwards;flex-shrink:0}
+
+.intro-title{font-family:‘Cormorant Garamond’,serif;font-size:clamp(2rem,8vw,5rem);font-weight:300;letter-spacing:0.06em;text-align:center;line-height:1;opacity:0;animation:tup 1.2s 1.8s cubic-bezier(.16,1,.3,1) forwards}
+.intro-sub{font-size:clamp(0.4rem,1.5vw,0.55rem);font-weight:300;letter-spacing:clamp(0.2em,2vw,0.5em);text-transform:uppercase;color:var(–text2);text-align:center;margin-top:1rem;opacity:0;animation:fi 1s 2.4s ease forwards;padding:0 1rem}
+.intro-line{width:50px;height:1px;background:linear-gradient(to right,transparent,var(–gold),transparent);margin:1.4rem auto 0;opacity:0;animation:fi 0.8s 2.5s ease forwards}
+.intro-skip{margin-top:2rem;font-size:clamp(0.4rem,1.2vw,0.48rem);letter-spacing:0.4em;text-transform:uppercase;color:rgba(197,160,40,0.4);background:transparent;border:1px solid rgba(197,160,40,0.2);padding:0.6rem 1.4rem;cursor:pointer;opacity:0;animation:fi 0.8s 3s ease forwards;transition:all 0.3s}
+.intro-skip:hover{color:var(–gold);border-color:var(–gold)}
+.intro-progress{position:absolute;bottom:0;left:0;height:2px;background:var(–gold);animation:prog 5.3s 0.2s linear forwards}
+@keyframes prog{to{width:100%}}
+@keyframes tup{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fi{to{opacity:1}}
+
+/* ════════════════════════════
+NAV
+════════════════════════════ */
+nav{
+position:fixed;top:0;left:0;right:0;z-index:200;
+display:flex;justify-content:space-between;align-items:center;
+padding:0.8rem 1.5rem;
+background:rgba(6,6,6,0.97);
+backdrop-filter:blur(20px);
+border-bottom:1px solid rgba(197,160,40,0.08);
+}
+.nav-brands{display:flex;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav-brands::-webkit-scrollbar{display:none}
+.nav-brand{display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.9rem;border-right:1px solid rgba(197,160,40,0.08);transition:background 0.3s;flex-shrink:0}
+.nav-brand:first-child{padding-left:0}
+.nav-brand:last-child{border-right:none}
+.nav-brand:hover{background:rgba(197,160,40,0.04)}
+.nb-name{font-size:0.55rem;font-weight:500;letter-spacing:0.06em;color:var(–white);line-height:1}
+.nb-sec{font-size:0.38rem;letter-spacing:0.18em;text-transform:uppercase;color:var(–gold);margin-top:2px}
+.nav-cta{font-size:0.52rem;font-weight:600;letter-spacing:0.25em;text-transform:uppercase;background:var(–gold);color:var(–dark);padding:0.6rem 1.2rem;flex-shrink:0;transition:opacity 0.3s;margin-left:0.8rem}
+.nav-cta:hover{opacity:0.85;color:var(–dark)}
+
+/* ════════════════════════════
+WHATSAPP
+════════════════════════════ */
+.wa-fixed{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;width:52px;height:52px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);animation:wap 2.5s infinite;transition:transform 0.3s}
+.wa-fixed:hover{transform:scale(1.1)}
+.wa-fixed svg{width:24px;height:24px;fill:#fff}
+@keyframes wap{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 0 0 12px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
+
+/* ════════════════════════════
+HERO
+════════════════════════════ */
+.hero{
+min-height:100vh;position:relative;
+display:flex;flex-direction:column;
+justify-content:center;
+padding:6rem 5% 4rem;
+overflow:hidden;
+}
+.hero-bg{position:absolute;inset:0;background:url(‘https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=80’) center/cover;filter:brightness(0.18) saturate(0.5);animation:hzoom 18s ease forwards}
+@keyframes hzoom{from{transform:scale(1.05)}to{transform:scale(1)}}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to right,rgba(6,6,6,.92) 0%,rgba(6,6,6,.1) 70%),linear-gradient(to top,rgba(6,6,6,.7) 0%,transparent 50%)}
+.hero-cnt{position:relative;z-index:2;max-width:min(640px,90vw)}
+.hero-tag{display:flex;align-items:center;gap:0.8rem;font-size:clamp(0.42rem,1.2vw,0.5rem);font-weight:600;letter-spacing:0.45em;text-transform:uppercase;color:var(–gold);margin-bottom:1.5rem;animation:sr 1s 0.2s ease both;opacity:0}
+.hero-tag::before{content:’’;width:24px;height:1px;background:var(–gold);flex-shrink:0}
+.hero h1{font-family:‘Cormorant Garamond’,serif;font-size:clamp(2.8rem,7vw,6rem);font-weight:300;line-height:1;animation:sr 1s 0.4s ease both;opacity:0}
+.hero h1 span{display:block}
+.hero h1 em{font-style:italic;color:var(–gold2)}
+.hero-desc{margin-top:1.5rem;font-size:clamp(0.68rem,1.5vw,0.78rem);font-weight:300;color:var(–text2);line-height:1.9;max-width:440px;border-left:2px solid var(–gold);padding-left:1.2rem;animation:sr 1s 0.6s ease both;opacity:0}
+.hero-act{display:flex;gap:0.8rem;margin-top:2.5rem;flex-wrap:wrap;animation:sr 1s 0.8s ease both;opacity:0}
+.btn-g{background:var(–gold);color:var(–dark);padding:0.9rem 1.8rem;font-size:clamp(0.5rem,1.2vw,0.58rem);font-weight:600;letter-spacing:0.25em;text-transform:uppercase;transition:opacity .3s,transform .2s;display:inline-block}
+.btn-g:hover{opacity:.88;transform:translateY(-2px);color:var(–dark)}
+.btn-o{background:transparent;color:var(–white);padding:0.9rem 1.8rem;border:1px solid rgba(245,242,238,.2);font-size:clamp(0.5rem,1.2vw,0.58rem);font-weight:500;letter-spacing:0.25em;text-transform:uppercase;transition:all .3s;display:inline-block}
+.btn-o:hover{border-color:var(–gold);color:var(–gold)}
+@keyframes sr{from{opacity:0;transform:translateX(-22px)}to{opacity:1;transform:translateX(0)}}
+
+/* ════════════════════════════
+NUMERI
+════════════════════════════ */
+.nums{display:grid;grid-template-columns:repeat(4,1fr);background:var(–dark2);border-top:1px solid rgba(197,160,40,.07);border-bottom:1px solid rgba(197,160,40,.07)}
+.ni{padding:2rem 1rem;text-align:center;border-right:1px solid rgba(197,160,40,.07);transition:background .4s}
+.ni:last-child{border-right:none}
+.ni:hover{background:var(–dark3)}
+.ni-n{font-family:‘Cormorant Garamond’,serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:300;color:var(–gold);line-height:1}
+.ni-l{font-size:clamp(0.38rem,1vw,0.5rem);font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(–text);margin-top:.4rem}
+
+/* ════════════════════════════
+UTILS
+════════════════════════════ */
+.lbl{font-size:clamp(0.4rem,1vw,0.5rem);font-weight:600;letter-spacing:.45em;text-transform:uppercase;color:var(–gold);display:flex;align-items:center;gap:.8rem}
+.lbl::before{content:’’;width:18px;height:1px;background:var(–gold);flex-shrink:0}
+.ttl{font-family:‘Cormorant Garamond’,serif;font-size:clamp(1.8rem,4vw,3.5rem);font-weight:300;line-height:1.08;margin-top:.7rem}
+.ttl em{font-style:italic;color:var(–gold2)}
+
+/* ════════════════════════════
+LE 3 AZIENDE
+════════════════════════════ */
+.companies{padding:5rem 5%;max-width:1400px;margin:0 auto}
+.co-hdr{margin-bottom:3rem}
+.co-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(197,160,40,.05)}
+
+.cc{background:var(–dark2);position:relative;overflow:hidden;transition:background .4s;display:flex;flex-direction:column}
+.cc:hover{background:var(–dark3)}
+.cc::before{content:’’;position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(–gold),transparent);transform:scaleX(0);transform-origin:center;transition:transform .5s}
+.cc:hover::before{transform:scaleX(1)}
+.cc-img{height:clamp(160px,25vw,240px);overflow:hidden;position:relative;flex-shrink:0}
+.cc-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.6);transition:transform .8s,filter .5s}
+.cc:hover .cc-img img{transform:scale(1.06);filter:brightness(.4)}
+.cc-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(14,14,14,.92) 0%,transparent 55%)}
+.cc-bar{position:absolute;bottom:1rem;left:1.2rem;display:flex;align-items:center;gap:.7rem}
+.cc-box{width:38px;height:38px;display:flex;align-items:center;justify-content:center;background:rgba(6,6,6,.85);border:1px solid rgba(197,160,40,.28);flex-shrink:0}
+.cc-box svg{width:26px;height:26px}
+.cc-bname{font-family:‘Cormorant Garamond’,serif;font-size:clamp(0.75rem,1.5vw,0.92rem);font-weight:400;color:var(–white);line-height:1.2}
+.cc-btag{font-size:.4rem;letter-spacing:.25em;text-transform:uppercase;color:var(–gold);margin-top:2px}
+.cc-body{padding:1.5rem;display:flex;flex-direction:column;flex:1}
+.cc-slogan{font-family:‘Cormorant Garamond’,serif;font-size:clamp(1.1rem,2vw,1.4rem);font-weight:300;line-height:1.2;margin-bottom:.8rem}
+.cc-slogan em{font-style:italic;color:var(–gold2)}
+.cc-desc{font-size:clamp(0.65rem,1.2vw,0.72rem);color:var(–text);font-weight:300;line-height:1.85;flex:1}
+.cc-svcs{margin-top:1.4rem;padding-top:1.2rem;border-top:1px solid rgba(197,160,40,.07)}
+.cc-stitle{font-size:.4rem;letter-spacing:.32em;text-transform:uppercase;color:var(–gold);margin-bottom:.8rem}
+.cc-svc{display:flex;align-items:center;gap:.6rem;font-size:clamp(0.6rem,1.1vw,0.67rem);color:var(–text2);font-weight:300;margin-bottom:.45rem}
+.cc-svc::before{content:’—’;color:var(–gold);font-size:.55rem;flex-shrink:0}
+.cc-cta{display:inline-flex;align-items:center;gap:.6rem;margin-top:1.4rem;font-size:.52rem;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(–gold);transition:gap .3s}
+.cc-cta:hover{gap:1rem;color:var(–gold)}
+
+/* ════════════════════════════
+AUTOMOTIVE
+════════════════════════════ */
+.auto{background:var(–dark3);overflow:hidden}
+.auto-split{display:grid;grid-template-columns:1fr 1fr;min-height:clamp(400px,50vw,520px)}
+.auto-vis{position:relative;overflow:hidden}
+.auto-vis img{width:100%;height:100%;object-fit:cover;filter:brightness(.35) saturate(.5);transition:transform .8s}
+.auto:hover .auto-vis img{transform:scale(1.04)}
+.auto-ov{position:absolute;inset:0;background:linear-gradient(to right,transparent,var(–dark3) 78%)}
+.auto-cnt{padding:clamp(2rem,5vw,4.5rem) clamp(1.5rem,4vw,3.5rem);display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(197,160,40,.07)}
+.auto-cnt p{font-size:clamp(0.65rem,1.3vw,0.76rem);color:var(–text);font-weight:300;line-height:1.9;margin:1.2rem 0 2rem}
+.auto-feats{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:2rem}
+.af{padding:1rem;border:1px solid rgba(197,160,40,.09);transition:border-color .3s,background .3s}
+.af:hover{border-color:rgba(197,160,40,.28);background:rgba(197,160,40,.03)}
+.af-icon{font-size:1.2rem;margin-bottom:.4rem}
+.af-title{font-size:.58rem;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(–white)}
+.af-desc{font-size:.63rem;color:var(–text);font-weight:300;margin-top:.25rem;line-height:1.5}
+
+/* ════════════════════════════
+PERCHÉ
+════════════════════════════ */
+.why{padding:5rem 5%;max-width:1400px;margin:0 auto}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(197,160,40,.05);margin-top:3rem}
+.wi{background:var(–dark2);padding:2.5rem 1.8rem;position:relative;overflow:hidden;transition:background .4s}
+.wi:hover{background:var(–dark3)}
+.wi-n{font-family:‘Cormorant Garamond’,serif;font-size:3.5rem;font-weight:300;color:rgba(197,160,40,.06);line-height:1;position:absolute;top:1rem;right:1rem}
+.wi-icon{font-size:1.8rem;margin-bottom:1rem}
+.wi-title{font-family:‘Cormorant Garamond’,serif;font-size:clamp(1rem,2vw,1.25rem);font-weight:400;margin-bottom:.7rem}
+.wi-desc{font-size:clamp(0.62rem,1.1vw,0.7rem);color:var(–text);font-weight:300;line-height:1.8}
+
+/* ════════════════════════════
+RECENSIONI
+════════════════════════════ */
+.reviews{padding:5rem 5%;background:var(–dark2)}
+.rv-inner{max-width:1400px;margin:0 auto}
+.rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2rem;margin-top:3rem}
+.rv{padding:2rem;border:1px solid rgba(197,160,40,.07);position:relative;transition:border-color .4s,transform .4s;background:var(–dark)}
+.rv:hover{border-color:rgba(197,160,40,.2);transform:translateY(-4px)}
+.rv-brand{position:absolute;top:1.2rem;right:1.2rem;font-size:.4rem;letter-spacing:.2em;text-transform:uppercase;color:var(–gold);border:1px solid rgba(197,160,40,.18);padding:.2rem .5rem}
+.rv-stars{color:var(–gold);letter-spacing:.1em;margin-bottom:1rem;font-size:.82rem}
+.rv-text{font-size:clamp(0.65rem,1.2vw,0.74rem);color:var(–text2);font-weight:300;line-height:1.9;font-style:italic}
+.rv-auth{display:flex;align-items:center;gap:.8rem;margin-top:1.5rem;padding-top:1.2rem;border-top:1px solid rgba(197,160,40,.07)}
+.rv-av{width:36px;height:36px;border-radius:50%;background:rgba(197,160,40,.1);display:flex;align-items:center;justify-content:center;font-family:‘Cormorant Garamond’,serif;font-size:1rem;color:var(–gold);flex-shrink:0}
+.rv-name{font-size:.67rem;font-weight:500;color:var(–white)}
+.rv-role{font-size:.44rem;letter-spacing:.16em;text-transform:uppercase;color:var(–gold);margin-top:2px}
+
+/* ════════════════════════════
+CONTATTI
+════════════════════════════ */
+.cs{background:var(–dark)}
+.cs-hdr{padding:5rem 5% 0;max-width:1400px;margin:0 auto}
+.cs-grid{display:grid;grid-template-columns:1fr 1fr;max-width:1400px;margin:2.5rem auto 0;border-top:1px solid rgba(197,160,40,.07)}
+.cs-info{padding:3rem 5%;border-right:1px solid rgba(197,160,40,.07)}
+.cs-brands{display:flex;flex-direction:column;gap:.8rem;margin-top:2rem}
+.cb{display:flex;align-items:flex-start;gap:.9rem;padding:1rem 1.2rem;border:1px solid rgba(197,160,40,.07);transition:border-color .3s,background .3s}
+.cb:hover{border-color:rgba(197,160,40,.2);background:rgba(197,160,40,.03)}
+.cb-logo{width:36px;height:36px;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid rgba(197,160,40,.18)}
+.cb-logo svg{width:22px;height:22px}
+.cb-name{font-size:.66rem;font-weight:500;color:var(–white)}
+.cb-info{font-size:.47rem;color:var(–text);font-weight:300;margin-top:3px;line-height:1.7}
+.cb-info a{color:var(–text);text-decoration:none}
+.cb-info a:hover{color:var(–gold)}
+.cs-form{padding:3rem 5%}
+.cform{display:flex;flex-direction:column;gap:1rem}
+.fg{display:flex;flex-direction:column;gap:.4rem}
+.fg label{font-size:.46rem;letter-spacing:.28em;text-transform:uppercase;color:var(–gold)}
+.fg input,.fg select,.fg textarea{background:rgba(255,255,255,.025);border:1px solid rgba(197,160,40,.1);color:var(–white);padding:.85rem 1rem;font-family:‘Montserrat’,sans-serif;font-size:clamp(0.7rem,1.4vw,0.78rem);font-weight:300;outline:none;transition:border-color .3s;appearance:none;-webkit-appearance:none;width:100%}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(136,128,119,.45)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(–gold)}
+.fg select option{background:var(–dark2);color:var(–white)}
+.fg textarea{resize:vertical;min-height:90px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.btn-sub{background:var(–gold);color:var(–dark);padding:.95rem 2rem;border:none;font-family:‘Montserrat’,sans-serif;font-size:.56rem;font-weight:600;letter-spacing:.28em;text-transform:uppercase;cursor:pointer;transition:opacity .3s,transform .2s;align-self:flex-start}
+.btn-sub:hover{opacity:.88;transform:translateY(-2px)}
+.map-wrap{border-top:1px solid rgba(197,160,40,.07)}
+.map-wrap iframe{width:100%;height:300px;border:none;filter:grayscale(100%) brightness(.6) contrast(1.1);display:block}
+
+/* ════════════════════════════
+FOOTER
+════════════════════════════ */
+footer{padding:4rem 5% 2rem;display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:3rem;background:var(–dark2);border-top:1px solid rgba(197,160,40,.07)}
+.f-ttl{font-family:‘Cormorant Garamond’,serif;font-size:1.1rem;font-weight:300;color:var(–gold2);letter-spacing:.1em}
+.f-sub{font-size:.42rem;letter-spacing:.28em;text-transform:uppercase;color:var(–text);margin-top:4px}
+.f-desc{font-size:.65rem;color:var(–text);font-weight:300;line-height:1.85;margin-top:1rem}
+.f-col h4{font-size:.42rem;letter-spacing:.3em;text-transform:uppercase;color:var(–gold);margin-bottom:1.1rem}
+.f-col ul{list-style:none}
+.f-col li{font-size:.65rem;color:var(–text);font-weight:300;margin-bottom:.6rem}
+.fbar{padding:1.2rem 5%;display:flex;justify-content:space-between;align-items:center;background:var(–dark2);border-top:1px solid rgba(197,160,40,.04);flex-wrap:wrap;gap:.5rem}
+.fbar span{font-size:.48rem;color:rgba(136,128,119,.3);font-weight:300}
+
+/* ════════════════════════════
+REVEAL
+════════════════════════════ */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .85s ease,transform .85s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.1s}.d2{transition-delay:.2s}
+
+/* ════════════════════════════
+RESPONSIVE MOBILE
+════════════════════════════ */
+@media(max-width:900px){
+.co-grid{grid-template-columns:1fr}
+.why-grid{grid-template-columns:1fr 1fr}
+.rv-grid{grid-template-columns:1fr}
+.auto-split{grid-template-columns:1fr}
+.auto-vis{height:240px}
+.auto-ov{background:linear-gradient(to top,var(–dark3) 20%,transparent 80%)}
+.cs-grid{grid-template-columns:1fr}
+.cs-info{border-right:none;border-bottom:1px solid rgba(197,160,40,.07);padding:2.5rem 5%}
+.cs-form{padding:2.5rem 5%}
+footer{grid-template-columns:1fr 1fr;gap:2rem}
+}
+@media(max-width:600px){
+.nb-sec{display:none}
+.nums{grid-template-columns:1fr 1fr}
+.why-grid{grid-template-columns:1fr}
+.intro-logos{gap:1rem}
+.isep{display:none}
+footer{grid-template-columns:1fr}
+.fbar{flex-direction:column;text-align:center}
+.frow{grid-template-columns:1fr}
+.hero-act{flex-direction:column}
+.btn-g,.btn-o{text-align:center;width:fit-content}
+}
+</style>
+
+</head>
+<body>
+
+<!-- ════ INTRO ════ -->
+
+<div id="intro">
+  <canvas id="pcanvas"></canvas>
+  <div class="intro-inner">
+    <div class="intro-logos">
+
+```
+  <div class="il">
+    <svg viewBox="0 0 32 32" fill="none">
+      <path d="M4 14L16 4L28 14V28H20V20H12V28H4V14Z" stroke="#C5A028" stroke-width="1.4" fill="rgba(197,160,40,.07)"/>
+      <circle cx="16" cy="18" r="4" fill="rgba(197,160,40,.88)"/>
+      <path d="M16 13.8Q18.8 16.2 16 18Q13.2 16.2 16 13.8Z" fill="#F5F2EE"/>
+      <path d="M11.8 18Q14.2 15.2 16 18Q14.2 20.8 11.8 18Z" fill="#F5F2EE"/>
+      <path d="M20.2 18Q17.8 15.2 16 18Q17.8 20.8 20.2 18Z" fill="#F5F2EE"/>
+    </svg>
+    <div class="il-name">La Rosa di<br>San Michele</div>
+  </div>
+
+  <div class="isep"></div>
+
+  <div class="il">
+    <svg viewBox="0 0 28 28" fill="none">
+      <rect x="11" y="2" width="6" height="23" stroke="#C5A028" stroke-width="1.2" fill="none"/>
+      <line x1="12" y1="5" x2="16" y2="5" stroke="#C5A028" stroke-width=".75"/>
+      <line x1="12" y1="8" x2="16" y2="8" stroke="#C5A028" stroke-width=".75"/>
+      <line x1="12" y1="11" x2="16" y2="11" stroke="#C5A028" stroke-width=".75"/>
+      <line x1="12" y1="14" x2="16" y2="14" stroke="#C5A028" stroke-width=".75"/>
+      <line x1="12" y1="17" x2="16" y2="17" stroke="#C5A028" stroke-width=".75"/>
+      <rect x="3.5" y="8" width="5.5" height="17" stroke="#C5A028" stroke-width="1.2" fill="none"/>
+      <line x1="4.5" y1="11" x2="7.5" y2="11" stroke="#C5A028" stroke-width=".7"/>
+      <line x1="4.5" y1="14" x2="7.5" y2="14" stroke="#C5A028" stroke-width=".7"/>
+      <line x1="4.5" y1="17" x2="7.5" y2="17" stroke="#C5A028" stroke-width=".7"/>
+      <rect x="19" y="8" width="5.5" height="17" stroke="#C5A028" stroke-width="1.2" fill="none"/>
+      <line x1="20" y1="11" x2="23" y2="11" stroke="#C5A028" stroke-width=".7"/>
+      <line x1="20" y1="14" x2="23" y2="14" stroke="#C5A028" stroke-width=".7"/>
+      <line x1="20" y1="17" x2="23" y2="17" stroke="#C5A028" stroke-width=".7"/>
+      <line x1="1" y1="25" x2="27" y2="25" stroke="#C5A028" stroke-width="1.2"/>
+    </svg>
+    <div class="il-name">Olimpia<br>Costruzioni</div>
+  </div>
+
+  <div class="isep"></div>
+
+  <div class="il">
+    <svg viewBox="0 0 44 44" fill="none">
+      <circle cx="22" cy="22" r="20" stroke="#C5A028" stroke-width=".9" fill="none"/>
+      <path d="M6 35L22 9L38 35Z" fill="none" stroke="#C5A028" stroke-width="1.3"/>
+      <circle cx="22" cy="7.5" r="3" stroke="#C5A028" stroke-width=".9" fill="none"/>
+      <line x1="22" y1="10.5" x2="22" y2="19" stroke="#C5A028" stroke-width=".9"/>
+      <line x1="19.2" y1="17" x2="22" y2="17" stroke="#C5A028" stroke-width=".9"/>
+      <path d="M2.5 28Q4.5 22.5 7 26Q5.5 20 9.5 21.5" stroke="#C5A028" stroke-width=".75" fill="none"/>
+      <path d="M41.5 28Q39.5 22.5 37 26Q38.5 20 34.5 21.5" stroke="#C5A028" stroke-width=".75" fill="none"/>
+    </svg>
+    <div class="il-name">Il Conte di<br>Montecristo</div>
+  </div>
+
+</div>
+
+<div class="intro-title">Prova la Qualità</div>
+<p class="intro-sub">Eccellenza in edilizia, immobiliare e automotive</p>
+<div class="intro-line"></div>
+<button class="intro-skip" onclick="chiudiIntro()">Entra nel sito ↓</button>
+```
+
+  </div>
+  <div class="intro-progress"></div>
+</div>
+
+<!-- ════ WHATSAPP ════ -->
+
+<a href="https://wa.me/393342447780" target="_blank" class="wa-fixed">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ════ NAV ════ -->
+
+<nav>
+  <div class="nav-brands">
+    <a href="#rosa" class="nav-brand">
+      <svg width="24" height="24" viewBox="0 0 32 32" fill="none"><path d="M4 14L16 4L28 14V28H20V20H12V28H4V14Z" stroke="rgba(197,160,40,.65)" stroke-width="1.4" fill="rgba(197,160,40,.05)"/><circle cx="16" cy="18" r="3.5" fill="rgba(197,160,40,.85)"/><path d="M16 14.5Q18 16 16 18Q14 16 16 14.5Z" fill="#F5F2EE"/><path d="M12.5 18Q14.5 15.5 16 18Q14.5 20.5 12.5 18Z" fill="#F5F2EE"/><path d="M19.5 18Q17.5 15.5 16 18Q17.5 20.5 19.5 18Z" fill="#F5F2EE"/></svg>
+      <div><div class="nb-name">La Rosa di S.M.</div><div class="nb-sec">SRL · Edil Green</div></div>
+    </a>
+    <a href="#olimpia" class="nav-brand">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect x="11" y="4" width="6" height="20" stroke="#C5A028" stroke-width="1.2" fill="none"/><line x1="12" y1="7" x2="16" y2="7" stroke="#C5A028" stroke-width=".8"/><line x1="12" y1="10" x2="16" y2="10" stroke="#C5A028" stroke-width=".8"/><line x1="12" y1="13" x2="16" y2="13" stroke="#C5A028" stroke-width=".8"/><rect x="4" y="9" width="5" height="15" stroke="#C5A028" stroke-width="1.2" fill="none"/><line x1="5" y1="12" x2="8" y2="12" stroke="#C5A028" stroke-width=".7"/><line x1="5" y1="15" x2="8" y2="15" stroke="#C5A028" stroke-width=".7"/><rect x="19" y="9" width="5" height="15" stroke="#C5A028" stroke-width="1.2" fill="none"/><line x1="20" y1="12" x2="23" y2="12" stroke="#C5A028" stroke-width=".7"/><line x1="20" y1="15" x2="23" y2="15" stroke="#C5A028" stroke-width=".7"/><line x1="2" y1="24" x2="26" y2="24" stroke="#C5A028" stroke-width="1"/></svg>
+      <div><div class="nb-name">Olimpia Costruzioni</div><div class="nb-sec">Costruzioni · Auto</div></div>
+    </a>
+    <a href="#conte" class="nav-brand">
+      <svg width="24" height="24" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" stroke="#C5A028" stroke-width=".8" fill="none"/><path d="M8 33L22 11L36 33Z" fill="none" stroke="#C5A028" stroke-width="1"/><circle cx="22" cy="9" r="2.5" stroke="#C5A028" stroke-width=".8" fill="none"/><line x1="22" y1="11.5" x2="22" y2="18" stroke="#C5A028" stroke-width=".8"/><line x1="20" y1="16" x2="22" y2="16" stroke="#C5A028" stroke-width=".8"/></svg>
+      <div><div class="nb-name">Il Conte di M.</div><div class="nb-sec">Immobiliare</div></div>
+    </a>
+  </div>
+  <a href="#contatti" class="nav-cta">Contattaci</a>
+</nav>
+
+<!-- ════ HERO ════ -->
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-cnt">
+    <div class="hero-tag">Castelnuovo Cilento · Salerno · Dal 2009</div>
+    <h1><span>Costruiamo.</span><span>Vendiamo.</span><span><em>Valutiamo.</em></span></h1>
+    <p class="hero-desc">Eccellenza in edilizia, immobiliare e automotive nel cuore del Cilento. Qualità artigianale, prezzi trasparenti, risultati concreti.</p>
+    <div class="hero-act">
+      <a href="#aziende" class="btn-g">Scopri il Gruppo</a>
+      <a href="#contatti" class="btn-o">Preventivo Gratuito</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ NUMERI ════ -->
+
+<div class="nums reveal">
+  <div class="ni"><div class="ni-n" data-target="15">0</div><div class="ni-l">Anni di esperienza</div></div>
+  <div class="ni"><div class="ni-n" data-target="200">0</div><div class="ni-l">Progetti completati</div></div>
+  <div class="ni"><div class="ni-n" data-target="3">0</div><div class="ni-l">Settori</div></div>
+  <div class="ni"><div class="ni-n" data-target="100">0</div><div class="ni-l">Clienti soddisfatti</div></div>
+</div>
+
+<!-- ════ LE 3 AZIENDE ════ -->
+
+<section class="companies" id="aziende">
+  <div class="co-hdr reveal"><div class="lbl">Le Nostre Aziende</div><h2 class="ttl">Tre eccellenze,<br>un <em>territorio</em></h2></div>
+  <div class="co-grid">
+
+```
+<div class="cc reveal" id="rosa">
+  <div class="cc-img">
+    <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=800&q=80" alt="La Rosa di San Michele">
+    <div class="cc-ov"></div>
+    <div class="cc-bar">
+      <div class="cc-box"><svg viewBox="0 0 32 32" fill="none"><path d="M4 14L16 4L28 14V28H20V20H12V28H4V14Z" stroke="rgba(197,160,40,.75)" stroke-width="1.4" fill="rgba(197,160,40,.06)"/><circle cx="16" cy="18" r="3.5" fill="rgba(197,160,40,.85)"/><path d="M16 14.5Q18 16 16 18Q14 16 16 14.5Z" fill="#F5F2EE"/><path d="M12.5 18Q14.5 15.5 16 18Q14.5 20.5 12.5 18Z" fill="#F5F2EE"/><path d="M19.5 18Q17.5 15.5 16 18Q17.5 20.5 19.5 18Z" fill="#F5F2EE"/></svg></div>
+      <div><div class="cc-bname">La Rosa di San Michele</div><div class="cc-btag">SRL · Edil Green</div></div>
+    </div>
+  </div>
+  <div class="cc-body">
+    <h3 class="cc-slogan">Costruiamo<br>il tuo <em>futuro</em></h3>
+    <p class="cc-desc">Costruzioni e ristrutturazioni nel Cilento con materiali di prima qualità. Dalla progettazione alla consegna, ogni dettaglio curato con passione.</p>
+    <div class="cc-svcs">
+      <div class="cc-stitle">Servizi</div>
+      <div class="cc-svc">Nuove costruzioni residenziali</div>
+      <div class="cc-svc">Ristrutturazioni complete</div>
+      <div class="cc-svc">Ecobonus &amp; Superbonus 110%</div>
+      <div class="cc-svc">Cappotti termici e serramenti</div>
+    </div>
+    <a href="#contatti" class="cc-cta">Preventivo gratuito →</a>
+  </div>
+</div>
+
+<div class="cc reveal d1" id="olimpia">
+  <div class="cc-img">
+    <img src="https://images.unsplash.com/photo-1590725121839-892b458a74fe?w=800&q=80" alt="Olimpia Costruzioni">
+    <div class="cc-ov"></div>
+    <div class="cc-bar">
+      <div class="cc-box" style="background:rgba(6,6,6,.88)"><svg viewBox="0 0 28 28" fill="none"><rect x="11" y="4" width="6" height="20" stroke="#E2C060" stroke-width="1.2" fill="none"/><line x1="12" y1="7" x2="16" y2="7" stroke="#E2C060" stroke-width=".8"/><line x1="12" y1="10" x2="16" y2="10" stroke="#E2C060" stroke-width=".8"/><line x1="12" y1="13" x2="16" y2="13" stroke="#E2C060" stroke-width=".8"/><rect x="4" y="9" width="5" height="15" stroke="#E2C060" stroke-width="1.2" fill="none"/><line x1="5" y1="12" x2="8" y2="12" stroke="#E2C060" stroke-width=".7"/><line x1="5" y1="15" x2="8" y2="15" stroke="#E2C060" stroke-width=".7"/><rect x="19" y="9" width="5" height="15" stroke="#E2C060" stroke-width="1.2" fill="none"/><line x1="20" y1="12" x2="23" y2="12" stroke="#E2C060" stroke-width=".7"/><line x1="20" y1="15" x2="23" y2="15" stroke="#E2C060" stroke-width=".7"/><line x1="2" y1="24" x2="26" y2="24" stroke="#E2C060" stroke-width="1"/></svg></div>
+      <div><div class="cc-bname">Olimpia Costruzioni</div><div class="cc-btag">Costruzioni · Automotive</div></div>
+    </div>
+  </div>
+  <div class="cc-body">
+    <h3 class="cc-slogan">Piccoli lavori &amp;<br><em>Automotive</em></h3>
+    <p class="cc-desc">Interventi edilizi su misura e selezione curata di veicoli nuovi e usati garantiti. Affidabilità e servizio personalizzato.</p>
+    <div class="cc-svcs">
+      <div class="cc-stitle">Servizi</div>
+      <div class="cc-svc">Piccoli lavori edilizi</div>
+      <div class="cc-svc">Manutenzione e riparazioni</div>
+      <div class="cc-svc">Vendita auto nuove e usate</div>
+      <div class="cc-svc">Permuta e finanziamento</div>
+    </div>
+    <a href="#auto" class="cc-cta">Scopri l'automotive →</a>
+  </div>
+</div>
+
+<div class="cc reveal d2" id="conte">
+  <div class="cc-img">
+    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80" alt="Il Conte di Montecristo">
+    <div class="cc-ov"></div>
+    <div class="cc-bar">
+      <div class="cc-box" style="background:rgba(6,6,6,.88)"><svg viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" stroke="#E2C060" stroke-width=".8" fill="none"/><path d="M8 33L22 11L36 33Z" fill="none" stroke="#E2C060" stroke-width="1.2"/><circle cx="22" cy="9" r="2.5" stroke="#E2C060" stroke-width=".8" fill="none"/><line x1="22" y1="11.5" x2="22" y2="18" stroke="#E2C060" stroke-width=".8"/><line x1="20" y1="16" x2="22" y2="16" stroke="#E2C060" stroke-width=".8"/></svg></div>
+      <div><div class="cc-bname">Il Conte di Montecristo</div><div class="cc-btag">Immobiliare di Pregio</div></div>
+    </div>
+  </div>
+  <div class="cc-body">
+    <h3 class="cc-slogan">Il tuo patrimonio,<br>la nostra <em>missione</em></h3>
+    <p class="cc-desc">Compravendita e gestione immobiliare nel Cilento con riservatezza. Valutiamo gratuitamente il tuo immobile.</p>
+    <div class="cc-svcs">
+      <div class="cc-stitle">Servizi</div>
+      <div class="cc-svc">Compravendita residenziale</div>
+      <div class="cc-svc">Valutazione gratuita immobili</div>
+      <div class="cc-svc">Gestione affitti e patrimoni</div>
+      <div class="cc-svc">Consulenza investimenti</div>
+    </div>
+    <a href="#contatti" class="cc-cta">Valutazione gratuita →</a>
+  </div>
+</div>
+```
+
+  </div>
+</section>
+
+<!-- ════ AUTOMOTIVE ════ -->
+
+<section class="auto" id="auto">
+  <div class="auto-split">
+    <div class="auto-vis">
+      <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=900&q=80" alt="Automotive">
+      <div class="auto-ov"></div>
+    </div>
+    <div class="auto-cnt reveal">
+      <div class="lbl">Olimpia Costruzioni</div>
+      <h2 class="ttl">Automotive<br><em>Premium</em></h2>
+      <p>Una selezione curata di veicoli nel Cilento. Ogni auto controllata e certificata. Permuta, finanziamento e assistenza post-vendita inclusi.</p>
+      <div class="auto-feats">
+        <div class="af"><div class="af-icon">🚗</div><div class="af-title">Usato Garantito</div><div class="af-desc">Ogni veicolo selezionato e certificato</div></div>
+        <div class="af"><div class="af-icon">🔄</div><div class="af-title">Permuta</div><div class="af-desc">Valutazione gratuita del tuo veicolo</div></div>
+        <div class="af"><div class="af-icon">💳</div><div class="af-title">Finanziamento</div><div class="af-desc">Rate su misura per ogni budget</div></div>
+        <div class="af"><div class="af-icon">🔧</div><div class="af-title">Post-Vendita</div><div class="af-desc">Officine convenzionate sul territorio</div></div>
+      </div>
+      <a href="#contatti" class="btn-g" style="align-self:flex-start">Richiedi informazioni</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ PERCHÉ ════ -->
+
+<section class="why">
+  <div class="reveal"><div class="lbl">Perché Sceglierci</div><h2 class="ttl">La differenza<br>che <em>si vede</em></h2></div>
+  <div class="why-grid reveal">
+    <div class="wi"><div class="wi-n">01</div><div class="wi-icon">🏆</div><div class="wi-title">15 anni di esperienza</div><div class="wi-desc">Oltre un decennio nel Cilento, con centinaia di progetti portati a termine con successo.</div></div>
+    <div class="wi"><div class="wi-n">02</div><div class="wi-icon">🤝</div><div class="wi-title">Trasparenza totale</div><div class="wi-desc">Preventivi chiari, nessun costo nascosto. Saprai sempre quanto spendi prima di firmare.</div></div>
+    <div class="wi"><div class="wi-n">03</div><div class="wi-icon">📍</div><div class="wi-title">Radicati nel Cilento</div><div class="wi-desc">Conosciamo il territorio meglio di chiunque. Rete consolidata di professionisti locali.</div></div>
+    <div class="wi"><div class="wi-n">04</div><div class="wi-icon">⭐</div><div class="wi-title">Qualità certificata</div><div class="wi-desc">Materiali selezionati, lavorazioni curate nei minimi dettagli. Standard di eccellenza sempre.</div></div>
+  </div>
+</section>
+
+<!-- ════ RECENSIONI ════ -->
+
+<section class="reviews">
+  <div class="rv-inner">
+    <div class="reveal"><div class="lbl">Recensioni</div><h2 class="ttl">Cosa dicono<br>i nostri <em>clienti</em></h2></div>
+    <div class="rv-grid reveal">
+      <div class="rv"><div class="rv-brand">La Rosa di S.M.</div><div class="rv-stars">★★★★★</div><p class="rv-text">"Hanno ristrutturato completamente il nostro appartamento. Lavoro impeccabile, tempi rispettati e prezzi onesti. Li consiglio a chiunque voglia qualità nel Cilento."</p><div class="rv-auth"><div class="rv-av">M</div><div><div class="rv-name">Marco T.</div><div class="rv-role">Cliente · Ristrutturazione</div></div></div></div>
+      <div class="rv"><div class="rv-brand">Il Conte di M.</div><div class="rv-stars">★★★★★</div><p class="rv-text">"Ho venduto il mio appartamento al mare grazie a loro. Professionali, discreti e preparati. Hanno gestito tutto dalla valutazione al rogito. Servizio eccellente."</p><div class="rv-auth"><div class="rv-av">A</div><div><div class="rv-name">Anna R.</div><div class="rv-role">Cliente · Vendita immobile</div></div></div></div>
+      <div class="rv"><div class="rv-brand">Olimpia Costruzioni</div><div class="rv-stars">★★★★★</div><p class="rv-text">"Ho acquistato un'auto da Olimpia, assistenza impeccabile dalla prima chiamata alla consegna. Trasparenti, onesti e senza sorprese. Tornerò di sicuro."</p><div class="rv-auth"><div class="rv-av">G</div><div><div class="rv-name">Giuseppe M.</div><div class="rv-role">Cliente · Acquisto auto</div></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ CONTATTI ════ -->
+
+<section class="cs" id="contatti">
+  <div class="cs-hdr reveal"><div class="lbl">Contatti</div><h2 class="ttl">Parliamo del<br>tuo <em>progetto</em></h2></div>
+  <div class="cs-grid">
+    <div class="cs-info reveal">
+      <div class="cs-brands">
+
+```
+    <div class="cb">
+      <div class="cb-logo"><svg viewBox="0 0 32 32" fill="none"><path d="M4 14L16 4L28 14V28H20V20H12V28H4V14Z" stroke="rgba(197,160,40,.65)" stroke-width="1.4" fill="rgba(197,160,40,.05)"/><circle cx="16" cy="18" r="3.5" fill="rgba(197,160,40,.85)"/><path d="M16 14.5Q18 16 16 18Q14 16 16 14.5Z" fill="#F5F2EE"/><path d="M12.5 18Q14.5 15.5 16 18Q14.5 20.5 12.5 18Z" fill="#F5F2EE"/><path d="M19.5 18Q17.5 15.5 16 18Q17.5 20.5 19.5 18Z" fill="#F5F2EE"/></svg></div>
+      <div>
+        <div class="cb-name">La Rosa di San Michele SRL</div>
+        <div class="cb-info">📍 Via Arbosto 54, Fraz. Velina — 84040 Castelnuovo Cilento (SA)<br>📞 <a href="tel:3342447780" style="color:var(--text)">334.2447780</a> &nbsp;·&nbsp; ✉️ <a href="mailto:larosadisanmichele@gmail.com" style="color:var(--text)">larosadisanmichele@gmail.com</a></div>
+      </div>
+    </div>
+
+    <div class="cb">
+      <div class="cb-logo" style="background:rgba(6,6,6,.5)"><svg viewBox="0 0 28 28" fill="none"><rect x="11" y="4" width="6" height="20" stroke="#C5A028" stroke-width="1.2" fill="none"/><line x1="12" y1="7" x2="16" y2="7" stroke="#C5A028" stroke-width=".8"/><line x1="12" y1="10" x2="16" y2="10" stroke="#C5A028" stroke-width=".8"/><rect x="4" y="9" width="5" height="15" stroke="#C5A028" stroke-width="1.2" fill="none"/><line x1="5" y1="12" x2="8" y2="12" stroke="#C5A028" stroke-width=".7"/><rect x="19" y="9" width="5" height="15" stroke="#C5A028" stroke-width="1.2" fill="none"/><line x1="20" y1="12" x2="23" y2="12" stroke="#C5A028" stroke-width=".7"/><line x1="2" y1="24" x2="26" y2="24" stroke="#C5A028" stroke-width="1"/></svg></div>
+      <div>
+        <div class="cb-name">Olimpia Costruzioni</div>
+        <div class="cb-info">📍 Via Arbosto 54, Fraz. Velina — 84040 Castelnuovo Cilento (SA)<br>📞 <a href="tel:3662168692" style="color:var(--text)">366.2168692</a></div>
+      </div>
+    </div>
+
+    <div class="cb">
+      <div class="cb-logo" style="background:rgba(6,6,6,.5)"><svg viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" stroke="#C5A028" stroke-width=".8" fill="none"/><path d="M8 33L22 11L36 33Z" fill="none" stroke="#C5A028" stroke-width="1"/><circle cx="22" cy="9" r="2.5" stroke="#C5A028" stroke-width=".8" fill="none"/><line x1="22" y1="11.5" x2="22" y2="18" stroke="#C5A028" stroke-width=".8"/><line x1="20" y1="16" x2="22" y2="16" stroke="#C5A028" stroke-width=".8"/></svg></div>
+      <div>
+        <div class="cb-name">Il Conte di Montecristo Immobiliare</div>
+        <div class="cb-info">📍 Via Arbosto 54, Fraz. Velina — 84040 Castelnuovo Cilento (SA)<br>📞 <a href="tel:3662168692" style="color:var(--text)">366.2168692</a></div>
+      </div>
+    </div>
+
+    <div class="cb" style="border-color:rgba(37,211,102,.2)">
+      <div class="cb-logo" style="background:#25D366"><svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+      <div>
+        <div class="cb-name" style="color:#25D366">WhatsApp — Risposta rapida</div>
+        <div class="cb-info"><a href="https://wa.me/393342447780" target="_blank" style="color:#25D366">Scrivici ora su WhatsApp →</a></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="cs-form reveal">
+  <div class="cform">
+    <div class="frow">
+      <div class="fg"><label>Nome</label><input type="text" placeholder="Mario"></div>
+      <div class="fg"><label>Cognome</label><input type="text" placeholder="Rossi"></div>
+    </div>
+    <div class="fg"><label>Email</label><input type="email" placeholder="mario@email.it"></div>
+    <div class="fg"><label>Telefono</label><input type="tel" placeholder="+39 000 000 0000"></div>
+    <div class="fg">
+      <label>Servizio richiesto</label>
+      <select>
+        <option value="">Seleziona...</option>
+        <option>La Rosa di S.M. — Nuova costruzione</option>
+        <option>La Rosa di S.M. — Ristrutturazione</option>
+        <option>La Rosa di S.M. — Ecobonus / Superbonus</option>
+        <option>Olimpia Costruzioni — Piccoli lavori</option>
+        <option>Olimpia Costruzioni — Acquisto / Permuta auto</option>
+        <option>Il Conte di Montecristo — Acquisto immobile</option>
+        <option>Il Conte di Montecristo — Vendita immobile</option>
+        <option>Il Conte di Montecristo — Valutazione gratuita</option>
+      </select>
+    </div>
+    <div class="fg"><label>Messaggio</label><textarea placeholder="Descrivi il tuo progetto o la tua richiesta..."></textarea></div>
+    <button class="btn-sub">Invia Richiesta →</button>
+  </div>
+</div>
+```
+
+  </div>
+  <div class="map-wrap reveal">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3037.8!2d15.193!3d40.171!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x133b9d!2sCastelnuovo+Cilento+SA!5e0!3m2!1sit!2sit!4v1" allowfullscreen="" loading="lazy"></iframe>
+  </div>
+</section>
+
+<!-- ════ FOOTER ════ -->
+
+<footer>
+  <div>
+    <div class="f-ttl">Il Gruppo · Cilento</div>
+    <div class="f-sub">Castelnuovo Cilento (SA) · Dal 2009</div>
+    <p class="f-desc">Tre realtà imprenditoriali radicate nel Cilento. P.IVA 06034520657</p>
+  </div>
+  <div class="f-col"><h4>La Rosa di S.M.</h4><ul><li>Nuove Costruzioni</li><li>Ristrutturazioni</li><li>Ecobonus 110%</li><li>Progettazione</li></ul></div>
+  <div class="f-col"><h4>Olimpia Costruzioni</h4><ul><li>Piccoli Lavori</li><li>Manutenzione</li><li>Vendita Auto</li><li>Permuta &amp; Finanziamento</li></ul></div>
+  <div class="f-col"><h4>Il Conte di M.</h4><ul><li>Compravendita</li><li>Valutazioni Gratuite</li><li>Gestione Affitti</li><li>Consulenza</li></ul></div>
+</footer>
+<div class="fbar">
+  <span>© 2025 · La Rosa di San Michele SRL · Olimpia Costruzioni · Il Conte di Montecristo Immobiliare · Via Arbosto 54, Castelnuovo Cilento (SA)</span>
+  <span>Privacy Policy · Cookie Policy</span>
+</div>
+
+<script>
+/* ── PARTICELLE CANVAS ── */
+const canvas = document.getElementById('pcanvas');
+const ctx = canvas.getContext('2d');
+function resize(){ canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const pts = [];
+for(let i = 0; i < 100; i++){
+  const a = Math.random() * Math.PI * 2;
+  const spd = 1.2 + Math.random() * 3;
+  pts.push({
+    x: canvas.width/2, y: canvas.height/2,
+    vx: Math.cos(a)*spd, vy: Math.sin(a)*spd,
+    r: 0.8 + Math.random()*2,
+    born: Date.now() + Math.random()*2000,
+    life: 2000 + Math.random()*2000,
+    maxA: 0.4 + Math.random()*0.6
+  });
+}
+function drawPts(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  const now = Date.now();
+  pts.forEach(p => {
+    if(now < p.born) return;
+    const age = now - p.born;
+    if(age > p.life) return;
+    p.x += p.vx; p.y += p.vy;
+    p.vx *= 0.985; p.vy *= 0.985;
+    const prog = age/p.life;
+    const alpha = prog < 0.2 ? (prog/0.2)*p.maxA : p.maxA*(1-(prog-0.2)/0.8);
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = `rgba(197,160,40,${Math.max(0,alpha)})`;
+    ctx.fill();
+  });
+  if(pts.some(p => Date.now() >= p.born && (Date.now()-p.born) < p.life)) requestAnimationFrame(drawPts);
+}
+drawPts();
+
+/* ── CHIUDI INTRO ── */
+function chiudiIntro(){
+  document.getElementById('intro').classList.add('gone');
+}
+setTimeout(chiudiIntro, 5500);
+
+/* ── SCROLL REVEAL ── */
+const obs = new IntersectionObserver(
+  e => e.forEach(x => { if(x.isIntersecting) x.target.classList.add('visible') }),
+  { threshold: 0.07 }
+);
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+/* ── COUNTER ── */
+function animateCounter(el){
+  const t = parseInt(el.dataset.target);
+  const steps = 55, dur = 1500;
+  let c = 0;
+  const tm = setInterval(() => {
+    c++;
+    el.textContent = Math.min(Math.round((c/steps)*t), t) + (t>3?'+':'');
+    if(c >= steps){ el.textContent = t+(t>3?'+':''); clearInterval(tm); }
+  }, dur/steps);
+}
+const cObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('[data-target]').forEach(animateCounter);
+      cObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.nums').forEach(el => cObs.observe(el));
+</script>
+
+</body>
+</html>
